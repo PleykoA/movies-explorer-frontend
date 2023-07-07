@@ -1,0 +1,11 @@
+@import url('./vendor/normalize.css');
+@import url('./vendor/fonts/fonts.css');
+
+html {
+  scroll-behavior: smooth;
+  background-color: #202020;
+}
+
+input[data-autocompleted] {
+  background-color: transparent;
+}
