@@ -33,7 +33,7 @@ const Navigation = ({ isOpen }) => {
                 </li>
             </ul>
             <button className='navigation__menu' onClick={isOpen}>
-                <img src={menu} alt='Бургер меню' />
+                <img src={menu} alt='Меню' />
             </button>
         </nav>
     );

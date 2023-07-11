@@ -23,7 +23,7 @@
   opacity: 0.5;
 }
 
-@media screen and (max-width: 650px) {
+@media screen and (max-width: 655px) {
   .navigation__list_items {
     gap: 14px;
   }
