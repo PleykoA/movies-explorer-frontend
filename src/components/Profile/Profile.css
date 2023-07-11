@@ -71,6 +71,7 @@
     background-color: #202020;
     color: #fff;
     border: none;
+    cursor: pointer;
 }
 
 .profile-form__button-signout {
@@ -79,6 +80,7 @@
     background-color: #202020;
     margin-top: 16px;
     border: none;
+    cursor: pointer;
 }
 
 
