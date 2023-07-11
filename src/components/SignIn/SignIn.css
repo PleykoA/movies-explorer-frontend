@@ -1,0 +1,34 @@
+.navigation__list_items {
+  display: flex;
+  gap: 30px;
+  margin: 0;
+  padding: 0;
+  align-items: center;
+}
+
+.navigation__link_item_signin {
+  background-color: #3ddc84;
+  padding: 8px 20px;
+  margin: 0;
+  border-radius: 3px;
+  color: #fff;
+  text-decoration: none;
+  cursor: pointer;
+  transition: ease-in-out 0.5s;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.navigation__link_item_signin:hover {
+  opacity: 0.5;
+}
+
+@media screen and (max-width: 650px) {
+  .navigation__list_items {
+    gap: 14px;
+  }
+
+  .navigation__link_item_signin {
+    font-size: 10px;
+  }
+}
