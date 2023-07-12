@@ -55,10 +55,6 @@
 }
 
 @media screen and (max-width: 768px) {
-    .techs__wrapper {
-        padding: 90px 50px;
-    }
-
     .techs__paragraph {
         margin-bottom: 22px;
     }
@@ -66,15 +62,28 @@
     .section-subtitle {
         font-size: 12px;
         margin-bottom: 83px;
+        color: #000;
     }
 
     .techs__item {
         font-size: 12px;
         padding: 20px 25px;
+        background-color: #E8E8E8;
     }
 
     .techs__title {
         margin-bottom: 80px;
+        color: #000;
+        border-bottom: 1px solid #000;
+    }
+
+    .techs {
+        background-color: #F5F5F5;
+    }
+
+    .techs__info {
+        padding-left: 58px;
+        padding-right: 58px;
     }
 }
 
@@ -103,5 +112,9 @@
 
     .techs__paragraph {
         font-size: 30px;
+    }
+
+    .techs {
+        background-color: #ffffff;
     }
 }

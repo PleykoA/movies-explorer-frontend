@@ -1,22 +1,31 @@
 import React from 'react';
 import './MoviesCard.css';
-import film from '../../images/film.svg'
+import { useLocation } from 'react-router-dom';
+
 const MoviesCard = ({ movie }) => {
+    let location = useLocation();
+    const likeBtn = location.pathname === '/movies';
+    const deleteBtn = location.pathname === '/saved-movies';
 
     return (
         <li className='movies-card'>
             <div className='movies-card__info'>
-                <p className='movies-card__name'>Какой-то фильм</p>
-                <p className='movies-card__duration'>
-                </p>
-                {movie
-                    ? <button className='movies-card__delete' type='button' />
-                    : <button className='movies-card__like' type='button' />}
-
-                <img className='movies-card__image'
-                    src={film}
-                    alt='Обложка кинофильма' />
+                <p className='movies-card__name'>{movie.nameRU}</p>
+                <p className='movies-card__duration'>{movie.duration}</p>
+                {likeBtn && (
+                    <button
+                        className={`movies-card__like ${movie.isLiked ? ' movies-card__like_active' : ''}`}></button>
+                )}
+                {deleteBtn && (
+                    <button
+                        className={`movies-card__delete`}></button>
+                )}
             </div>
+            <img
+                className='movies-card__image'
+                src={movie.thumbnail}
+                alt={movie.nameRU}
+            />
         </li>
     );
 };

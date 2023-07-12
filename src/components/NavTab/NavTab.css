@@ -26,7 +26,8 @@
     .navtab {
         display: flex;
         gap: 6px;
-        margin-bottom: 18px;
+        position: absolute;
+        bottom: 17px;
     }
 
     .navtab__link {

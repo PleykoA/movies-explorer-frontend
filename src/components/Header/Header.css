@@ -24,23 +24,10 @@
   .header {
     padding: 0;
     width: 90%;
-  }
-
-  .header_type_unauthorized {
-    padding: 20px 30px;
+    background-color: #FFFFFF;
   }
 
   .header__link {
     padding: 0;
-  }
-}
-
-@media screen and (max-width: 425px) {
-  .header {
-    padding: 15px 15px;
-  }
-
-  .header_type_unauthorized {
-    padding: 18px 14px;
   }
 }

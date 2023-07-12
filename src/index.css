@@ -6,8 +6,10 @@ html {
   background-color: #202020;
 }
 
-input[data-autocompleted] {
-  background-color: transparent;
+@media screen and (max-width: 768px) {
+  html {
+    background-color: #FFFFFF;
+  }
 }
 
 a {

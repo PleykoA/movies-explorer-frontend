@@ -83,8 +83,28 @@
     cursor: pointer;
 }
 
+@media screen and (max-width: 768px) {
 
-@media screen and (max-width: 550px) {
+    .profile-form__button-signout {
+        background-color: #fff;
+    }
+
+    .profile-form__button-edit {
+        background-color: #fff;
+        color: #000;
+    }
+
+    .profile {
+        padding-top: 236px;
+    }
+
+    .profile__input {
+        color: #000;
+    }
+
+}
+
+@media screen and (max-width: 425px) {
     .profile {
         padding: 70px 0 40px;
     }

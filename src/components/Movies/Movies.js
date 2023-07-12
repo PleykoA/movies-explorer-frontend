@@ -4,7 +4,7 @@ import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import { savedMovies } from '../../utils/constants';
 
-const Movies = () => {
+export default function Movies () {
   return (
     <section className='movies'>
       <SearchForm />
@@ -13,5 +13,3 @@ const Movies = () => {
     </section>
   );
 };
-
-export default Movies;

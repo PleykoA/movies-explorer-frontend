@@ -11,15 +11,15 @@
     width: 0;
 }
 
-.filter-checkbox__text{
-color: black;
+.filter-checkbox__text {
+    color: black;
 }
 
 .filter-checkbox__label {
     cursor: pointer;
     width: 36px;
     height: 20px;
-    background: #ebebeb;
+    background: #2be080;
     display: block;
     border-radius: 20px;
     position: relative;
@@ -39,7 +39,7 @@ color: black;
 }
 
 .filter-checkbox__input:checked+label:after {
-    background: #2be080;
+    background: #ebebeb;
 }
 
 .filter-checkbox__input:checked+label:after {
@@ -74,6 +74,5 @@ color: black;
     .filter-checkbox__text {
         padding-left: 14px;
         font-size: 11px;
-        color: #fff;
     }
 }

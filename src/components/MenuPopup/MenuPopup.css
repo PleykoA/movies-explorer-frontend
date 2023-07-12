@@ -11,8 +11,8 @@
     background-color: rgba(0, 0, 0, .3);
     opacity: 0;
     visibility: hidden;
-    transition: .5s ease all;
-    z-index: 3;
+    transition: .3s ease all;
+    z-index: 5;
 }
 
 .menu_opened {
@@ -41,13 +41,7 @@
     right: 45px;
 }
 
-.menu__close-button-image {
-    transition: .4s ease-in-out;
-
-}
-
 .menu__close-button-image:hover {
-    transition: .4s ease-in-out;
     opacity: 0.5;
 }
 
@@ -57,7 +51,6 @@
     gap: 28px;
     color: black;
     margin-block: 0;
-    padding-inline-start: 0;
     align-items: center;
     padding-top: 100px;
     text-decoration: none;
@@ -83,7 +76,7 @@
 .menu__item:hover {
     background-size: 100% 2px;
     text-decoration: underline;
-    opacity: 0.5;
+    opacity: 0.6;
 }
 
 .menu__item-account {

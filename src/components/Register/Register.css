@@ -55,12 +55,6 @@
   color: #fff;
 }
 
-.register__input::placeholder {
-  font-weight: 400;
-  font-size: 10px;
-  line-height: 12px;
-}
-
 .register__input:focus-visible {
   box-shadow: 0 1px 0 0 #2be080;
 }
@@ -90,10 +84,6 @@
   opacity: 0.6;
 }
 
-.register__form_input-field {
-  position: relative;
-}
-
 .form__input-error {
   font-weight: 400;
   font-size: 10px;
@@ -114,6 +104,10 @@
 
   .form__input-error {
     width: 250px;
+  }
+
+  .register__input {
+    background-color: #fff;
   }
 }
 

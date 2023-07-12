@@ -1,7 +1,7 @@
 .movies-card {
     list-style: none;
     overflow: hidden;
-    border-radius: 6px;
+    border-radius: 20px;
     background: #A0A0A0;
     justify-content: center;
 }
@@ -9,6 +9,7 @@
 .movies-card__image {
     vertical-align: bottom;
     object-fit: cover;
+    justify-content: center;
 }
 
 .movies-card__image:hover {
@@ -17,12 +18,12 @@
 }
 
 .movies-card__info {
-    padding: 16px;
     position: relative;
+    margin-left: 14px;
+    margin-bottom: 14px;
 }
 
 .movies-card__name {
-    margin: 0 0 17px;
     font-weight: 500;
     font-size: 13px;
     line-height: 16px;
@@ -41,16 +42,16 @@
     background: no-repeat center/contain url('../../images/like.svg');
     padding: 0;
     margin: 0;
-    width: 15px;
-    height: 15px;
+    width: 25px;
+    height: 25px;
     border: none;
     cursor: pointer;
     position: absolute;
-    top: 16px;
-    right: 20px;
+    top: 0px;
+    right: 15px;
 }
 
-.movies-card__like_liked {
+.movies-card__like_active {
     background: no-repeat center/contain url('../../images/like-active.svg');
     width: 30px;
     height: 30px;
@@ -58,28 +59,19 @@
 
 .movies-card__delete {
     background: no-repeat center/contain url('../../images/close.svg');
-    display: none;
     padding: 0;
     margin: 0;
-    width: 14px;
-    height: 12px;
+    width: 25px;
+    height: 25px;
     border: none;
     cursor: pointer;
     position: absolute;
-    top: 19px;
-    right: 24px;
+    top: 0px;
+    right: 15px;
+    background-color: #F9F9F9;
+    border-radius: 50%;
 }
 
-.movies-card__container:hover .movies-card__delete {
-    display: block;
-}
-
-@media screen and (max-width: 920px) {
-    .movies-card {
-        max-width: 339px;
-        max-height: 262px;
-    }
-}
 
 @media screen and (max-width: 768px) {
     .movies-card__image {
@@ -87,15 +79,22 @@
         height: 190px;
     }
 
-    .movies-card__info {
-        padding: 14px 16px;
+    .movies-card {
+        background-color: #FDFDFD;
+        box-shadow: 0 -1em 1em rgba(0, 0, 0, 0.1),
+            0 0 0 2px rgb(255, 255, 255);
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .movies-card__like {
+        right: 10px;
     }
 }
 
 @media screen and (max-width: 450px) {
     .movies-card {
         max-width: 300px;
-        max-height: 327px;
     }
 
     .movies-card__image {
@@ -103,7 +102,6 @@
     }
 
     .movies-card__name {
-        margin: 0 0 14px;
         font-size: 12px;
         line-height: 15px;
     }
@@ -111,14 +109,5 @@
     .movies-card__duration {
         font-size: 10px;
         line-height: 12px;
-    }
-
-    .movies-card__info {
-        padding: 14px;
-    }
-
-    .movies-card__like {
-        top: 17px;
-        right: 18px;
     }
 }

@@ -1,13 +1,14 @@
 .about-me {
-    width: 100%;
+    width: 90%;
     margin-top: 110px;
+    align-self: center;
 }
 
 .about-me__heading {
     font-size: 22px;
     font-weight: 400;
     padding-bottom: 23px;
-    border-bottom: 1px solid #dadada;
+    border-bottom: 1px solid #FFFFFF;
     margin: 0 0 90px;
     letter-spacing: -1px;
 }
@@ -55,16 +56,16 @@
     font-size: 14px;
     line-height: 1;
     font-weight: 500;
-    transition: 0.6s;
 }
 
 .about-me__link:hover {
-    opacity: 0.7;
+    opacity: 0.6;
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 768px) {
     .about-me__heading {
         margin-bottom: 66px;
+        border-bottom: 1px solid #000;
     }
 
     .about-me__title {
@@ -90,13 +91,13 @@
     .about-me__info {
         max-width: 364px;
     }
+
+    .about-me__link {
+        color: #000;
+    }
 }
 
 @media screen and (max-width: 550px) {
-    .about-me__wrapper {
-        padding: 70px 14px 50px;
-    }
-
     .about-me__heading {
         font-size: 18px;
         padding-bottom: 28px;

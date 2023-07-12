@@ -3,7 +3,6 @@
     flex-direction: column;
     align-items: center;
     gap: 184px;
-    padding-bottom: 60px;
 }
 
 .notFound__container {
@@ -35,7 +34,7 @@
 }
 
 
-@media screen and (max-width: 550px) {
+@media screen and (max-width: 600px) {
     .notFound__title {
         font-size: 80px;
         line-height: 1;

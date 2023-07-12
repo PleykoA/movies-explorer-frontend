@@ -3,7 +3,7 @@
     flex-direction: column;
   }
   
-  @media screen and (max-width: 650px) {
+  @media screen and (max-width: 600px) {
     .content {
       align-items: center;
     }

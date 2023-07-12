@@ -66,6 +66,7 @@ const Profile = () => {
                 <button
                     type='submit'
                     className='profile-form__button profile-form__button-signout'
+                    to='/singnin'
                 >
                     Выйти из аккаунта
                 </button>

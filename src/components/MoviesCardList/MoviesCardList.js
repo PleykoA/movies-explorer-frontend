@@ -1,23 +1,24 @@
+import React from 'react';
 import './MoviesCardList.css';
 import MoviesCard from '../MoviesCard/MoviesCard';
-import React from 'react';
+import { useLocation } from 'react-router-dom';
 
-export default function MoviesCardList({ movies }) {
+const MoviesCardList = ({ movies }) => {
+  let location = useLocation();
 
+  movies =
+    location.pathname === '/saved-movies'
+      ? movies.filter((m) => m.isLiked)
+      : movies;
   return (
-    <section className='moviescard-list'>
-      <ul className='movies-list'>
-        <li><MoviesCard movies={movies} /></li>
-        <li><MoviesCard movies={movies} /></li>
-        <li><MoviesCard movies={movies} /></li>
-        <li><MoviesCard movies={movies} /></li>
-        <li><MoviesCard movies={movies} /></li>
-        <li><MoviesCard movies={movies} /></li>
-        <li><MoviesCard movies={movies} /></li>
-        <li><MoviesCard movies={movies} /></li>
-        <li><MoviesCard movies={movies} /></li>
-      </ul>
-    </section>
+    <ul className='movies-list'>
+      {
+        movies.map((movie) => {
+          return <MoviesCard key={movie.movieId} movie={movie} />;
+        })
+      }
+    </ul>
   );
 };
 
+export default MoviesCardList;

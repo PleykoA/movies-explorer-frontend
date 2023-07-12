@@ -1,8 +1,10 @@
+import React, { useEffect } from 'react';
 import './MenuPopup.css';
 import { NavLink } from 'react-router-dom';
-import { useEffect } from 'react';
 import closeIcon from '../../images/close.svg';
 import iconProfile from '../../images/profile.svg';
+
+
 function Menu({ isOpen, onClose }) {
     function handleEscClose(evt) {
         evt.key === 'Escape' && onClose();

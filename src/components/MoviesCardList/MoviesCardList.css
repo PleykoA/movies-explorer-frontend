@@ -8,13 +8,9 @@
     list-style: none;
 }
 
-.moviescard-list {
-    list-style: none;
-}
-
-@media screen and (max-width: 920px) {
+@media screen and (max-width: 768px) {
     .movies-list {
-        margin: 50px 0 0;
+        margin: 70px 0 0;
         gap: 30px;
         grid-template-columns: repeat(2, minmax(auto, 339px));
     }
