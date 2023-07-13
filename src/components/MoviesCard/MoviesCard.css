@@ -1,6 +1,5 @@
 .movies-card {
     list-style: none;
-    overflow: hidden;
     border-radius: 20px;
     background: #A0A0A0;
     justify-content: center;
@@ -10,6 +9,7 @@
     vertical-align: bottom;
     object-fit: cover;
     justify-content: center;
+    width: 100%;
 }
 
 .movies-card__image:hover {

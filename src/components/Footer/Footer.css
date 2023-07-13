@@ -2,7 +2,7 @@
   font-weight: 400;
   font-size: 13px;
   line-height: 16px;
-  width: 89%;
+  margin: 0 70px;
   color: #303030
 }
 
@@ -45,6 +45,8 @@
     font-weight: 400;
     font-size: 13px;
     line-height: 16px;
+    margin-left: 30px;
+    margin-right: 30px;
   }
 
   .footer__link {
@@ -58,9 +60,10 @@
 
 @media screen and (max-width: 450px) {
   .footer {
-    padding: 30px 10px 0;
+    padding: 0;
     font-size: 12px;
     line-height: 15px;
+    margin: 0 14px;
   }
 
   .footer__text {
@@ -90,5 +93,6 @@
 
   .footer__date {
     color: #A0A0A0;
+    margin-bottom: 20px;
   }
 }

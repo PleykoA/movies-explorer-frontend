@@ -4,7 +4,7 @@
   justify-content: space-between;
   padding-bottom: 38px;
   min-height: 74px;
-  width: 84%;
+  margin: 0 70px;
   box-sizing: border-box;
   align-items: center;
   padding-top: 18px;
@@ -23,11 +23,19 @@
 @media screen and (max-width: 768px) {
   .header {
     padding: 0;
-    width: 90%;
     background-color: #FFFFFF;
+    margin: 0 30px 29px;
   }
 
   .header__link {
     padding: 0;
+  }
+}
+
+@media screen and (max-width: 425px) {
+  .header {
+    padding: 0;
+    background-color: #FFFFFF;
+    margin: 0 14px 14px;
   }
 }

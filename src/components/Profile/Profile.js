@@ -30,7 +30,7 @@ const Profile = () => {
                         required
                     />
                     <span
-                        className={`profile-form__input-error ${isValid ? '' : 'profile-form__input-error_active'
+                        className={`profile__input-error ${isValid ? '' : 'profile__input-error_active'
                             }`}
                     >
                         {errors.name}
@@ -49,7 +49,7 @@ const Profile = () => {
                         required
                     />
                     <span
-                        className={`profile-form__input-error ${isValid ? '' : 'profile-form__input-error_active'
+                        className={`profile__input-error ${isValid ? '' : 'profile__input-error_active'
                             }`}
                     >
                         {errors.email}
@@ -59,13 +59,13 @@ const Profile = () => {
 
                 <button
                     type='submit'
-                    className='profile-form__button profile-form__button-edit'
+                    className='profile__button profile__button-edit'
                 >
                     Редактировать
                 </button>
                 <button
                     type='submit'
-                    className='profile-form__button profile-form__button-signout'
+                    className='profile__button profile__button-signout'
                     to='/singnin'
                 >
                     Выйти из аккаунта

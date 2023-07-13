@@ -24,11 +24,11 @@ const Register = () => {
                     onRegister(values);
                 }}
             >
-                <label className='register__form register__form-label'>
+                <label className='register__form-label'>
                     Имя
                 </label>
                 <input
-                    className='register__input register_input_item_name'
+                    className='register__input register__input_item_name'
                     id='user-name'
                     name='name'
                     type='text'
@@ -40,16 +40,16 @@ const Register = () => {
                     required
                 />
                 <span
-                    className={`form__input-error ${isValid ? '' : 'form__input-error_active'}`}
+                    className={`register__input-error ${isValid ? '' : 'register__input-error_active'}`}
                 >
                     {errors.name}
                 </span>
 
-                <label className='register__form register__form-label'>
+                <label className='register__form-label'>
                     E-mail
                 </label>
                 <input
-                    className='register__input register_input_item_email'
+                    className='register__input register__input_item_email'
                     id='user-email'
                     name='email'
                     type='email'
@@ -61,16 +61,16 @@ const Register = () => {
                     required
                 />
                 <span
-                    className={`form__input-error ${isValid ? '' : 'form__input-error_active'}`}
+                    className={`register__input-error ${isValid ? '' : 'register__input-error_active'}`}
                 >
                     {errors.email}
                 </span>
 
-                <label className='register__form register__form-label'>
+                <label className='register__form-label'>
                     Пароль
                 </label>
                 <input
-                    className='register__input register_input_item_password'
+                    className='register__input register__input_item_password'
                     id='user-password'
                     name='password'
                     type='password'
@@ -82,7 +82,7 @@ const Register = () => {
                     required
                 />
                 <span
-                    className={`form__input-error ${isValid ? '' : 'form__input-error_active'}`}
+                    className={`register__input-error ${isValid ? '' : 'register__input-error_active'}`}
                 >
                     {errors.password}
                 </span>

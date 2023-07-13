@@ -17,7 +17,7 @@ const AboutProject = () => {
                 </div>
             </div>
             <div className='about-project__items'>
-                <span className='about-project__item_heading'>1 неделя</span>
+                <span className='about-project__item about-project__item_heading'>1 неделя</span>
                 <span className='about-project__item'>4 недели</span>
             </div>
             <div className='about-project__subitem'>

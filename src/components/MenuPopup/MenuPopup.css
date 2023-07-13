@@ -37,8 +37,9 @@
     height: 22px;
     width: 22px;
     position: absolute;
-    top: 20px;
-    right: 45px;
+    top: 10px;
+    right: 20px;
+    padding: 0;
 }
 
 .menu__close-button-image:hover {
@@ -83,15 +84,29 @@
     padding-top: 600px;
     font-size: 14px;
     line-height: 16px;
+    list-style-type: none;
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 900px) {
     .menu__items {
         gap: 25px;
         padding-top: 152px;
     }
 
+    .menu {
+        width: 100%;
+    }
+
+}
+
+@media screen and (max-width: 768px) {
+    .menu__items {
+        gap: 25px;
+        padding: 144px 14px;
+    }
+
     .menu__item-account {
         padding-top: 427px;
+        padding-bottom: 46px;
     }
 }

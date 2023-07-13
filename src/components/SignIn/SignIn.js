@@ -5,14 +5,14 @@ import './SignIn.css';
 const SingIn = () => {
     return (
         <nav className='navigation'>
-            <ul className='navigation__list_items'>
+            <ul className='navigation__list'>
                 <li className='navigation__list-item'>
                     <NavLink to='/signup' className='navigation__link'>Регистрация</NavLink>
                 </li>
                 <li className='navigation__list-item'>
                     <NavLink
                         to='/signin'
-                        className='navigation__link_item_signin'>Войти</NavLink>
+                        className='navigation__signin'>Войти</NavLink>
                 </li>
             </ul>
         </nav>

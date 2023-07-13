@@ -10,6 +10,14 @@
     height: 72px;
 }
 
+.search__button-icon {
+    cursor: pointer;
+}
+
+.search__button-icon:hover {
+    opacity: 0.6;
+}
+
 .search__form {
     display: flex;
     width: 100%;

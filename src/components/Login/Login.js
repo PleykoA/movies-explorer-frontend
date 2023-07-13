@@ -24,7 +24,7 @@ const Login = () => {
         }}
         className='login__form' >
 
-        <label htmlFor='' className='login__form login__form-label'>
+        <label htmlFor='' className='login__form-label'>
           E-mail
         </label>
         <input
@@ -34,7 +34,7 @@ const Login = () => {
           value={values.email || ''}
           onChange={handleChange}
           id='email'
-          placeholder='email'
+          placeholder='E-mail'
           minLength='2'
           maxLength='30'
           required
@@ -47,7 +47,7 @@ const Login = () => {
         </span>
 
 
-        <label htmlFor='' className='login__form login__form-label'>
+        <label htmlFor='' className='login__form-label'>
           Пароль </label>
         <input
           className='login__input login__input_item_password'

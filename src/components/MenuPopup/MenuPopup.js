@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import './MenuPopup.css';
 import { NavLink } from 'react-router-dom';
-import closeIcon from '../../images/close.svg';
+import closeIcon from '../../images/close-icon-menu.svg';
 import iconProfile from '../../images/profile.svg';
 
 
@@ -40,9 +40,9 @@ function Menu({ isOpen, onClose }) {
                     <li className='menu__item'>
                         <NavLink to='/saved-movies'>Сохранённые фильмы</NavLink>
                     </li>
-                    <li className='menu__item menu__item-account'>
+                    <li className='menu__item-account'>
                         <NavLink to='/profile'>
-                            <img className='menu__item menu__item-account-image'
+                            <img className='menu__item-account-image'
                                 src={iconProfile}
                                 alt='Иконка для перехода на страницу профиля' />
                         </NavLink>

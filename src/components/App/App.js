@@ -29,7 +29,6 @@ function App() {
         <CurrentUserContext.Provider value={currentUser}>
             <div className='app'>
 
-
                 <Routes>
                     <Route path='/'
                         element={

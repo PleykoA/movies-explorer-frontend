@@ -1,8 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
-
 import './Header.css';
-
 import Navigation from '../Navigation/Navigation';
 import SignIn from '../SignIn/SignIn';
 import logo from '../../images/logo.svg';

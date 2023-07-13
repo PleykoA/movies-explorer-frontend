@@ -1,7 +1,7 @@
 .portfolio {
     margin-bottom: 110px;
     margin-top: 110px;
-    width: 90%;
+    width: 89%;
     align-self: center;
 }
 
@@ -73,6 +73,17 @@
     .portfolio__header {
         color: #A0A0A0;
     }
+
+    .portfolio {
+        margin-bottom: 90px;
+        margin-top: 90px;
+    }
+
+    .portfolio__item {
+        border-bottom: 1px solid #E6E6E6;
+        font-size: 28px;
+    }
+
 }
 
 @media screen and (max-width: 425px) {
@@ -92,5 +103,9 @@
 
     .portfolio {
         margin-top: 70px;
+    }
+
+    .portfolio__header {
+        line-height: 20px;
     }
 }

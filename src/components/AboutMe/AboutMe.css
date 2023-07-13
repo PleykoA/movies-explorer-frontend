@@ -1,5 +1,5 @@
 .about-me {
-    width: 90%;
+    width: 89%;
     margin-top: 110px;
     align-self: center;
 }
@@ -80,6 +80,7 @@
 
     .about-me__description {
         margin-bottom: 87px;
+        line-height: 18px;
         font-size: 12px;
     }
 
@@ -95,12 +96,20 @@
     .about-me__link {
         color: #000;
     }
+
+    .about-me {
+        margin-top: 90px;
+    }
 }
 
 @media screen and (max-width: 550px) {
     .about-me__heading {
         font-size: 18px;
         padding-bottom: 28px;
+    }
+
+    .about-me {
+        margin-top: 70px;
     }
 
     .about-me__photo {
@@ -135,5 +144,6 @@
     .about-me__description {
         font-size: 11px;
         margin-bottom: 40px;
+        line-height: 16px;
     }
 }
