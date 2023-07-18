@@ -1,15 +1,26 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useFormValidation } from '../../utils/validation';
 import Logo from '../../images/logo.svg';
 import './Register.css';
 
-const Register = () => {
-    const { values, handleChange, errors, isValid } = useFormValidation();
-    const onRegister = (v) => {
-        console.log(v);
-    };
+const Register = ({ onRegister, isLoggedIn }) => {
+    const { values, handleChange, errors, resetValidation, isValid } = useFormValidation();
+    const navigate = useNavigate();
+    useEffect(() => {
+        resetValidation();
+    }, [resetValidation]);
 
+    function handleSubmit(evt) {
+        evt.preventDefault(evt);
+        onRegister(values);
+    }
+
+    useEffect(() => {
+        if (isLoggedIn) {
+            navigate('/movies');
+        }
+    }, [isLoggedIn]);
     return (
         <section className='register'>
             <Link to='/'>
@@ -19,11 +30,7 @@ const Register = () => {
             <h1 className='register__heading'>Добро пожаловать!</h1>
 
             <form className='register__form'
-                onSubmit={(evt) => {
-                    evt.preventDefault();
-                    onRegister(values);
-                }}
-            >
+                onSubmit={handleSubmit}>
                 <label className='register__form-label'>
                     Имя
                 </label>
@@ -88,7 +95,7 @@ const Register = () => {
                 </span>
 
                 <button
-                    className='register__submit'
+                    className={`register__submit ${!isValid ? `register__submit_disabled` : ``}`}
                     type='submit'
                     disabled={!isValid}
                 >

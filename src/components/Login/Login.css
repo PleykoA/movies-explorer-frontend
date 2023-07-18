@@ -84,6 +84,14 @@
     margin-top: 160px;
 }
 
+.login__submit_disabled {
+    color: black;
+    opacity: .2;
+    cursor: default;
+    background-color: #F7F7F7;
+    pointer-events: none;
+}
+
 .login__signup {
     margin: 16px 0 0;
     text-align: center;

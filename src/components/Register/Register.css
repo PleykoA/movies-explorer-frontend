@@ -80,6 +80,14 @@
   cursor: pointer;
 }
 
+.register__submit_disabled {
+  color: black;
+  opacity: .2;
+  cursor: default;
+  background-color: #F7F7F7;
+  pointer-events: none;
+}
+
 .register__submit:hover {
   opacity: 0.6;
 }

@@ -1,13 +1,29 @@
+import React, { useEffect } from 'react';
 import loginLogo from '../../images/logo.svg';
 import { Link } from 'react-router-dom';
 import './Login.css';
 import { useFormValidation } from '../../utils/validation';
+import { useNavigate } from 'react-router-dom';
 
-const Login = () => {
-  const { values, handleChange, errors, isValid } = useFormValidation();
-  const onLogin = (val) => {
-    console.log(val);
-  };
+const Login = ({ onLogin, isLoggedIn }) => {
+  const { values, handleChange, errors, resetValidation, isValid } = useFormValidation({});
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    resetValidation();
+  }, [resetValidation]);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate('/movies');
+    }
+  }, [isLoggedIn]);
+
+  function handleSubmit(evt) {
+    evt.preventDefault(evt);
+    const { email, password } = values
+    onLogin(email, password);
+  }
 
   return (
     <section className='login'>
@@ -18,11 +34,8 @@ const Login = () => {
 
       <h1 className='login__heading'>Рады видеть!</h1>
       <form
-        onSubmit={(evt) => {
-          evt.preventDefault();
-          onLogin(values);
-        }}
-        className='login__form' >
+        className='login__form'
+        onSubmit={handleSubmit}>
 
         <label htmlFor='' className='login__form-label'>
           E-mail
@@ -34,6 +47,7 @@ const Login = () => {
           value={values.email || ''}
           onChange={handleChange}
           id='email'
+          pattern='^([^ ]+@[^ ]+\.[a-z]{2,6}|)$'
           placeholder='E-mail'
           minLength='2'
           maxLength='30'
@@ -45,7 +59,6 @@ const Login = () => {
         >
           {errors.email}
         </span>
-
 
         <label htmlFor='' className='login__form-label'>
           Пароль </label>
@@ -67,7 +80,9 @@ const Login = () => {
         >
           {errors.password}
         </span>
-        <button type='submit' className='login__submit'>
+
+        <button type='submit'
+          className={`login__submit ${!isValid ? `login__submit_disabled` : ``}`}>
           Войти
         </button>
 
