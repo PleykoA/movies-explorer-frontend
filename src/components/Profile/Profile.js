@@ -1,20 +1,44 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import './Profile.css';
 import { useFormValidation } from '../../utils/validation';
+import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 
-const Profile = () => {
-    const { values, handleChange, errors, isValid } = useFormValidation();
-    const onEditProfile = (val) => {
-        console.log(val);
+const Profile = ({
+    onSignOut,
+    onUpdateUser,
+    setErrorMessage,
+    isDisabledEditProfile,
+    setIsDisabledEditProfile }) => {
+    const { values, handleChange, errors, isValid, setValues, setIsValid } = useFormValidation();
+    const { currentUser } = useContext(CurrentUserContext);
+
+    useEffect(() => {
+        if (currentUser) {
+            setValues(currentUser);
+            setIsValid(true);
+        }
+    }, [currentUser, setIsValid, setValues]);
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        onUpdateUser(values);
+    };
+
+    // Обработка клика на выход из профиля
+    const handleCLickLogout = () => {
+        onSignOut();
+    };
+
+    // Обработка клика по кнопке Редактировать
+    const handleClickEdit = () => {
+        setIsDisabledEditProfile(!isDisabledEditProfile);
+        setErrorMessage("");
     };
 
     return (
         <section className='profile'>
-            <h1 className='profile__heading'>Привет, Ася!</h1>
-            <form onSubmit={(e) => {
-                e.preventDefault();
-                onEditProfile(values);
-            }}
+            <h1 className='profile__heading'>Привет, {currentUser.name}!</h1>
+            <form onSubmit={handleSubmit}
                 className='profile__form'
             >
                 <label htmlFor='name' className='profile__label'>
@@ -56,14 +80,15 @@ const Profile = () => {
                     </span>
                 </label>
 
-
                 <button
                     type='submit'
-                    className='profile__button profile__button-edit'
+                    className={`profile__button profile__button-edit ${!isValid ? `profile__button profile__button-edit_disabled` : ``}`}
+                    onClick={handleClickEdit}
                 >
                     Редактировать
                 </button>
                 <button
+                    onClick={handleCLickLogout}
                     type='submit'
                     className='profile__button profile__button-signout'
                     to='/singnin'

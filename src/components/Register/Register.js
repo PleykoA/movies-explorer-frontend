@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useFormValidation } from '../../utils/validation';
 import Logo from '../../images/logo.svg';
 import './Register.css';
 
-const Register = ({ onRegister, isLoggedIn }) => {
+const Register = ({ onRegister }) => {
     const { values, handleChange, errors, resetValidation, isValid } = useFormValidation();
-    const navigate = useNavigate();
+
     useEffect(() => {
         resetValidation();
     }, [resetValidation]);
@@ -16,11 +16,6 @@ const Register = ({ onRegister, isLoggedIn }) => {
         onRegister(values);
     }
 
-    useEffect(() => {
-        if (isLoggedIn) {
-            navigate('/movies');
-        }
-    }, [isLoggedIn]);
     return (
         <section className='register'>
             <Link to='/'>

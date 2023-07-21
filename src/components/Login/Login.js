@@ -3,21 +3,13 @@ import loginLogo from '../../images/logo.svg';
 import { Link } from 'react-router-dom';
 import './Login.css';
 import { useFormValidation } from '../../utils/validation';
-import { useNavigate } from 'react-router-dom';
 
-const Login = ({ onLogin, isLoggedIn }) => {
+const Login = ({ onLogin }) => {
   const { values, handleChange, errors, resetValidation, isValid } = useFormValidation({});
-  const navigate = useNavigate();
 
   useEffect(() => {
     resetValidation();
   }, [resetValidation]);
-
-  useEffect(() => {
-    if (isLoggedIn) {
-      navigate('/movies');
-    }
-  }, [isLoggedIn]);
 
   function handleSubmit(evt) {
     evt.preventDefault(evt);

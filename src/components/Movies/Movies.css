@@ -20,6 +20,11 @@
   color: #fff;
 }
 
+.movies__btn_disabled {
+  visibility: hidden;
+}
+
+
 .movies__btn:hover {
   background-color: #2be080;
   color: #fff;

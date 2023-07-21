@@ -3,7 +3,11 @@ import './MoviesCardList.css';
 import MoviesCard from '../MoviesCard/MoviesCard';
 import { useLocation } from 'react-router-dom';
 
-const MoviesCardList = ({ movies }) => {
+const MoviesCardList = ({
+  movies,
+  savedMovies,
+  onLikeMovie,
+  onDeleteMovie }) => {
   let location = useLocation();
 
   movies =
@@ -14,7 +18,12 @@ const MoviesCardList = ({ movies }) => {
     <ul className='movies-list'>
       {
         movies.map((movie) => {
-          return <MoviesCard key={movie.movieId} movie={movie} />;
+          return <MoviesCard
+            key={movie.id || movie.movieId}
+            movie={movie}
+            savedMovies={savedMovies}
+            onLikeMovie={onLikeMovie}
+            onDeleteMovie={onDeleteMovie} />;
         })
       }
     </ul>
