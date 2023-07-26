@@ -9,9 +9,11 @@ const NotFound = () => {
                 <h2 className='notFound__title'>404</h2>
                 <p className='notFound__subtitle'>Страница не найдена</p>
             </div>
-            <Link to='/' className='notFound__link'>
+            <a onClick={() => {
+                window.history.back();
+            }} href='#' className='notFound__link'>
                 Назад
-            </Link>
+            </a>
         </div>
     );
 };

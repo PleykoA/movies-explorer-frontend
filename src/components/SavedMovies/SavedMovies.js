@@ -34,26 +34,17 @@ function SavedMovies({ onDelete, savedMoviesList }) {
     }
 
     function handleDeleteMovie(movie) {
-        if (typeof movie === 'object') {
-            movie = movie._id;
-        }
-
-        const freshMovies = filteredMovies.filter(m => {
-            if (movie === m._id) {
-                return false;
-            } else {
-                return true;
-            }
-        });
         onDelete(movie);
-        setFilteredMovies(freshMovies);
     }
 
     useEffect(() => {
         setFilteredMovies(filteredMovies);
         filteredMovies.length !== 0 ? setNotFound(false) : setNotFound(true);
-
     }, [shortMovies, filteredMovies]);
+
+    useEffect(() => {
+        setFilteredMovies(savedMoviesList);
+    }, [savedMoviesList]);
 
     return (
         <section className='saved-movies'>

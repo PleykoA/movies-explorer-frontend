@@ -43,7 +43,6 @@ class Api {
                 'Content-Type': 'application/json',
                 Authorization: 'Bearer ' + localStorage.getItem('jwt')
             },
-
         }).then(res => this._checkResponse(res));
     };
 

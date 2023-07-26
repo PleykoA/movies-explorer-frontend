@@ -26,10 +26,13 @@ function App() {
     const [isClickMenu, setClickMenu] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [isSingUpSuccess, setIsSingUpSuccess] = useState(false);
+    const [successTTState, setSuccessTTState] = useState(false);
+    const [ToolTipMessage, setToolTipMessage] = useState('');
     const [savedMoviesList, setSavedMoviesList] = useState([]);
-    const [notFound, setNotFound] = useState(false);
+    const [, setNotFound] = useState(false);
     const [isInfoTooltipOpen, setInfoTTOpen] = useState(false);
     const [closePopup, setAllTTClose] = useState(false);
+    const [tempUserData, settempUserData] = useState([]);
 
     function handleRegister(params) {
         mainApi
@@ -37,11 +40,16 @@ function App() {
             .then((data) => {
                 if (data) {
                     setIsSingUpSuccess(true);
+                    setSuccessTTState(true);
+                    setToolTipMessage("Вы успешно зарегистрировались!");
                     setInfoTTOpen(true);
+                    settempUserData(params);
                 }
             })
             .catch((err) => {
                 setIsSingUpSuccess(false);
+                setSuccessTTState(false);
+                setToolTipMessage("При регистрации произошла ошибка. Попробуйте ещё");
                 setInfoTTOpen(true);
                 console.log(err);
             });
@@ -54,9 +62,7 @@ function App() {
                 if (data.token) {
                     localStorage.setItem('jwt', data.token);
                     setIsLoggedIn(true);
-                    getUserData();
                     navigate('/movies');
-                    setAllTTClose(true);
                 }
             })
             .catch((err) => {
@@ -70,21 +76,27 @@ function App() {
     useEffect(() => {
         setInfoTTOpen(false);
         if (isSingUpSuccess) {
-            navigate('/signin');
+            handleLogin(tempUserData.email, tempUserData.password);
+            settempUserData([]);
         }
     }, [closePopup]);
 
     useEffect(() => {
-        if (!isLoggedIn) {
-            mainApi
-                .getUserInfo()
-                .then((user) => {
-                    setCurrentUser(user);
-                    setIsLoggedIn(true);
-                    localStorage.setItem('loggedIn', true);
-                })
-                .catch((error) => console.log(error));
-        }
+        mainApi
+            .getUserInfo()
+            .then((user) => {
+                setCurrentUser(user);
+                setIsLoggedIn(true);
+                localStorage.setItem('loggedIn', true);
+            })
+            .catch((error) => {
+                console.log(error);
+                if (headerPaths.includes(location.pathname)) {
+                    navigate('/');
+                }
+                setIsLoggedIn(false);
+            });
+
         let routesArr = reactRouterToArray(routes);
 
         if (routesArr.includes(location.pathname)) {
@@ -114,8 +126,16 @@ function App() {
             .updateUserInfo(values.name, values.email)
             .then((res) => {
                 setCurrentUser(res);
+                setToolTipMessage("Изменения сохранены! Щикарно");
+                setSuccessTTState(true);
+                setInfoTTOpen(true);
             })
-            .catch((error) => console.log(error));
+            .catch((error) => {
+                console.log(error);
+                setToolTipMessage("Изменения не сохранены! Попробуйте ещё раз позже.");
+                setSuccessTTState(true);
+                setInfoTTOpen(true);
+            });
     };
 
     function handleLikeMovie(movie, isLiked, id) {
@@ -165,42 +185,6 @@ function App() {
     useEffect(() => {
     }, [savedMoviesList]);
 
-    function getUserData() {
-        if (isLoggedIn) {
-            mainApi
-                .getUserInfo()
-                .then((res) => {
-                    setCurrentUser(res.data);
-                })
-                .catch((error) => console.log(error));
-        }
-    };
-
-    function tokenCheck() {
-        const jwt = localStorage.getItem('jwt');
-        if (jwt) {
-            mainApi
-                .getUserInfo()
-                .then((res) => {
-                    if (res._id) {
-                        setCurrentUser(res);
-                        setIsLoggedIn(true);
-                        if (notFound) {
-                            navigate('/movies');
-                        }
-                    }
-                })
-                .catch((error) => console.log(error));
-        }
-    }
-
-    useEffect(() => {
-        if (isLoggedIn) {
-            tokenCheck();
-        }
-    }, [isLoggedIn]);
-
-
     function handleOpenMenu() {
         setClickMenu(true);
     }
@@ -212,13 +196,13 @@ function App() {
         <CurrentUserContext.Provider value={currentUser}>
             <div className='app'>
                 {headerPaths.includes(location.pathname) && (
-                    <Header isOpen={handleOpenMenu} />
+                    <Header isOpen={handleOpenMenu} isLoggedIn={isLoggedIn} />
                 )}
                 <Routes>
                     <Route path='/'
                         element={
                             <>
-                                <Header />
+                                <Header isLoggedIn={isLoggedIn} />
                                 <Main />
                                 <Footer />
                             </>
@@ -261,7 +245,8 @@ function App() {
             <InfoTooltip
                 isOpen={isInfoTooltipOpen}
                 onClose={setAllTTClose}
-                isSingUpSuccess={isSingUpSuccess}
+                successState={successTTState}
+                message={ToolTipMessage}
             />
         </CurrentUserContext.Provider>
     );

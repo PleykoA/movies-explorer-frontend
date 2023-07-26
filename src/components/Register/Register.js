@@ -79,8 +79,8 @@ const Register = ({ onRegister }) => {
                     value={values.password || ''}
                     onChange={handleChange}
                     placeholder='Введите пароль'
-                    minLength='6'
-                    maxLength='200'
+                    minLength='7'
+                    maxLength='14'
                     required
                 />
                 <span

@@ -8,6 +8,7 @@ function Profile({ onSignOut, handleProfileEdit }) {
         useFormValidation();
     const currentUser = useContext(CurrentUserContext);
     const [showSaveBtn, setShowSaveBtn] = useState(false);
+    const [isChanged, setIsChanged] = useState(false);
 
     useEffect(() => {
         if (currentUser) {
@@ -24,6 +25,14 @@ function Profile({ onSignOut, handleProfileEdit }) {
         setShowSaveBtn(false);
     };
 
+    useEffect(() => {
+        setIsChanged(false);
+        if ((currentUser.name !== values.name && currentUser.email !== values.email) || (currentUser.name !== values.name || currentUser.email !== values.email)) {
+            setIsChanged(true);
+        } else {
+            setIsChanged(false);
+        }
+    }, [handleChange, isChanged]);
 
     return (
         <section className='profile'>
@@ -48,8 +57,7 @@ function Profile({ onSignOut, handleProfileEdit }) {
                         disabled
                     />
                     <span
-                        className={`profile__input-error ${isValid ? '' : 'profile__input-error_active'
-                            }`}
+                        className={`profile__input-error ${isValid ? '' : 'profile__input-error_active'}`}
                     >
                         {errors.name}
                     </span>
@@ -71,8 +79,7 @@ function Profile({ onSignOut, handleProfileEdit }) {
                         disabled
                     />
                     <span
-                        className={`profile__input-error ${isValid ? '' : 'profile__input-error_active'
-                            }`}
+                        className={`profile__input-error ${isValid ? '' : 'profile__input-error_active'}`}
                     >
                         {errors.email}
                     </span>
@@ -81,11 +88,12 @@ function Profile({ onSignOut, handleProfileEdit }) {
                 {showSaveBtn ? (
                     <button
                         type='submit'
-                        className='profile__button profile__button-save'
+                        className={`profile__button profile__button-save ${(isValid && isChanged) ? '' : 'disabled'}`}
                         onClick={(e) => {
                             document.getElementById('name').setAttribute('disabled', 'disabled');
                             document.getElementById('email').setAttribute('disabled', 'disabled');
                         }}
+
                     >
                         Сохранить
                     </button>

@@ -4,7 +4,7 @@ import failed from '../../images/failed.svg';
 import enter from '../../images/enter.svg';
 
 
-function InfoTooltip({ isOpen, onClose, isSingUpSuccess }) {
+function InfoTooltip({ isOpen, onClose, successState, message }) {
     return (
         <section
             className={isOpen ? 'popup popup_opened' : 'popup'}
@@ -15,11 +15,11 @@ function InfoTooltip({ isOpen, onClose, isSingUpSuccess }) {
             <div className='popup__container'>
                 <img
                     className='infotooltip__image'
-                    src={isSingUpSuccess ? enter : failed}
-                    alt={isSingUpSuccess ? 'Вы успешно зарегистрировались' : 'Что-то пошло не так'}
+                    src={successState ? enter : failed}
+                    alt={message}
                 />
                 <p className='infotooltip__text'>
-                    {isSingUpSuccess ? 'Вы успешно зарегистрировались' : 'Что-то пошло не так! Попробуйте ещё раз.'}
+                    {message}
                 </p>
                 <button
                     className='popup__close-button'

@@ -1,20 +1,20 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Movies.css';
 import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
-import { CurrentUserContext } from '../../contexts/CurrentUserContext.js';
 import { filterMovies, filterShorts } from '../../utils/utils.js';
 import movieApi from '../../utils/MovieApi';
 import Preloader from '../Preloader/Preloader';
 
 function Movies({ savedMoviesList, onLike, onDelete }) {
-  const currentUser = useContext(CurrentUserContext);
   const [NotFound, setNotFound] = useState(false);
   const [initialMovies, setInitialMovies] = useState([]);
   const [filteredMovies, setFilteredMovies] = useState([]);
   const [isAllMovies, setIsAllMovies] = useState([]);
   const [shortMovies, setShortMovies] = useState(false);
   const [isLoader, setIsLoader] = useState(false);
+  const navigate = useNavigate();
 
   function handleSetFilteredMovies(movies, userQuery, shortMoviesCheckbox) {
     const moviesList = filterMovies(movies, userQuery, false);
@@ -40,6 +40,7 @@ function Movies({ savedMoviesList, onLike, onDelete }) {
         .getMovies()
         .then(movies => {
           setInitialMovies(movies);
+          setIsAllMovies(movies);
           localStorage.setItem(`movies`, JSON.stringify(movies));
           if (
             localStorage.getItem(`shortMovies`) === 'true'
@@ -87,25 +88,12 @@ function Movies({ savedMoviesList, onLike, onDelete }) {
   }
 
   useEffect(() => {
-    if (localStorage.getItem(`shortMovies`) === 'true') {
-      setShortMovies(true);
-    } else {
-      setShortMovies(false);
-    }
-    if (localStorage.getItem(`movieSearch`)) {
-      handleFormSubmit(localStorage.getItem(`movieSearch`), false)
-    }
-  }, [currentUser]);
-
-  useEffect(() => {
     if (localStorage.getItem(`movies`) && JSON.parse(localStorage.getItem(`movies`)).length > 0) {
       const movies = JSON.parse(
         localStorage.getItem(`movies`)
       );
       setInitialMovies(movies);
-      if (
-        localStorage.getItem(`shortMovies`) === 'true'
-      ) {
+      if (localStorage.getItem(`shortMovies`) === 'true') {
         setFilteredMovies(filterShorts(movies));
       } else {
         setFilteredMovies(movies);
@@ -128,7 +116,13 @@ function Movies({ savedMoviesList, onLike, onDelete }) {
         )
         .finally(() => setIsLoader(false));
     }
-  }, [currentUser]);
+    
+    if (localStorage.getItem(`shortMovies`) === 'true') {
+      setShortMovies(true);
+    } else {
+      setShortMovies(false);
+    }
+  }, [navigate]);
 
   return (
     <section className='movies'>

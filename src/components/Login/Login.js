@@ -73,7 +73,7 @@ const Login = ({ onLogin }) => {
         </span>
 
         <button type='submit'
-          className={`login__submit ${!isValid ? `login__submit_disabled` : ``}`}>Войти</button>
+          className={`login__submit ${!isValid ? `login__submit_disabled` : ``}`} disabled={!isValid}>Войти</button>
 
         <div className='login__signup'>
           Еще не зарегистрированы?
