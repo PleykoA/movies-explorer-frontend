@@ -16,7 +16,7 @@ Git;
 
 ## Ссылка на макет https://disk.yandex.ru/d/K_Sp6KdjTe4wsw
 
-## Ссылка на pull request: 
+## Ссылка на pull request: https://github.com/PleykoA/movies-explorer-frontend/pull/2
 
 ## IP 84.201.140.136
 
