@@ -2,48 +2,76 @@ import React, { useState, useEffect } from 'react';
 import './SavedMovies.css';
 import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
-import { filterMovies } from '../../utils/FilterMovies';
+import { filterMovies, filterShorts } from '../../utils/utils';
 
-const SavedMovies = ({ savedMovies, handleDeleteMovie }) => {
-    const [flag] = useState('saved');
-    const [keyWords, setKeyWords] = useState('');
-    const [moviesToRender, setMoviesToRend] = useState(savedMovies);
-    const [isCheckBoxActive, setIsCheckBoxActive] = useState(false);
+function SavedMovies({ onDelete, savedMoviesList }) {
+    const [shortMovies, setShortMovies] = useState(false);
+    const [notFound, setNotFound] = useState(false);
+    const [displayShort] = useState(savedMoviesList);
+    const [filteredMovies, setFilteredMovies] = useState(displayShort);
 
-    // Обработка запроса на поиск фильма
-    const handleMoviesSearch = (data, isCheckBoxActive) => {
-        setKeyWords(data);
-        const moviesFiltered = filterMovies(savedMovies, data, isCheckBoxActive)
-        setMoviesToRend(moviesFiltered);
+    function displayShortFilms() {
+        setShortMovies(!shortMovies);
+        localStorage.setItem(`shortSavedMovies`, !shortMovies);
+        if (!shortMovies) {
+            let moviesList = filterShorts(savedMoviesList);
+            setFilteredMovies(moviesList);
+            moviesList.length === 0 ? setNotFound(true) : setNotFound(false);
+        } else {
+            setFilteredMovies(savedMoviesList);
+            savedMoviesList.length === 0 ? setNotFound(true) : setNotFound(false);
+        }
+    }
+
+    function handleFormSubmit(value) {
+        const moviesList = filterMovies(savedMoviesList, value, shortMovies);
+        if (moviesList.length === 0) {
+            setNotFound(true);
+        } else {
+            setNotFound(false);
+            setFilteredMovies(moviesList);
+        }
+    }
+
+    function handleDeleteMovie(movie) {
+        if (typeof movie === 'object') {
+            movie = movie._id;
+        }
+
+        const freshMovies = filteredMovies.filter(m => {
+            if (movie === m._id) {
+                return false;
+            } else {
+                return true;
+            }
+        });
+        onDelete(movie);
+        setFilteredMovies(freshMovies);
     }
 
     useEffect(() => {
-        const moviesFiltered = filterMovies(savedMovies, keyWords, isCheckBoxActive)
-        setMoviesToRend(moviesFiltered);
-    }, [isCheckBoxActive])
+        setFilteredMovies(filteredMovies);
+        filteredMovies.length !== 0 ? setNotFound(false) : setNotFound(true);
 
-    useEffect(() => {
-        setMoviesToRend(savedMovies);
-    }, [savedMovies])
-
+    }, [shortMovies, filteredMovies]);
 
     return (
         <section className='saved-movies'>
             <SearchForm
-                keyWords={keyWords}
-                setKeyWords={setKeyWords}
-                handleMoviesSearch={handleMoviesSearch}
-                setMoviesToRend={setMoviesToRend}
-                isCheckBoxActive={isCheckBoxActive}
-                setIsCheckBoxActive={setIsCheckBoxActive} />
-            {
-                savedMovies.length === 0
-                    ?
-                    (<p className='saved-movies__not-found'>Фильмы не найдены.</p>)
-                    :
-
-                    <MoviesCardList moviesToRender={moviesToRender} flag={flag} handleClick={handleDeleteMovie} allMovies={['anytext']} />
-            }
+                handleFormSubmit={handleFormSubmit}
+                displayShortFilms={displayShortFilms}
+                shortMovies={shortMovies}
+            />
+            {!notFound ? (
+                <MoviesCardList
+                    isSavedMovies={true}
+                    moviesList={filteredMovies}
+                    savedMoviesList={filteredMovies}
+                    onDelete={handleDeleteMovie}
+                />
+            ) : (
+                <p>Ничего не найдено :С</p>
+            )}
         </section>
     );
 };

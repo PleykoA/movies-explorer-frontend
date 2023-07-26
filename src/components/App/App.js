@@ -7,114 +7,45 @@ import Register from '../Register/Register';
 import Login from '../Login/Login';
 import Movies from '../Movies/Movies';
 import Profile from '../Profile/Profile';
+import InfoTooltip from '../InfoToolTip/InfoToolTip';
 import NotFound from '../NotFound/NotFound';
 import SavedMovies from '../SavedMovies/SavedMovies';
 import Footer from '../Footer/Footer';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import MenuPopup from '../MenuPopup/MenuPopup';
 import ProtectedRouteElement from '../ProtectedRoute';
-import movieApi, { MOVIE_URL } from "../../utils/MovieApi";
 import mainApi from '../../utils/MainApi';
+import reactRouterToArray from "react-router-to-array";
 
 function App() {
     const location = useLocation();
+    const navigate = useNavigate();
     const [currentUser, setCurrentUser] = useState('');
     const headerPaths = ['/movies', '/saved-movies', '/profile'];
     const footerPaths = ['/movies', '/saved-movies'];
     const [isClickMenu, setClickMenu] = useState(false);
-    const navigate = useNavigate();
-    const [isLoggedIn, setIsLoggedIn] = useState(false); // Отвечает за авторизацию
-    const [errorMesage, setErrorMessage] = useState("");
-    const [savedMovies, setSavedMovies] = useState([]);
-    const [isPreloaderActive, setIsPreloaderActive] = useState(false);
-    const [isDisabledEditProfile, setIsDisabledEditProfile] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isSingUpSuccess, setIsSingUpSuccess] = useState(false);
+    const [savedMoviesList, setSavedMoviesList] = useState([]);
+    const [notFound, setNotFound] = useState(false);
+    const [isInfoTooltipOpen, setInfoTTOpen] = useState(false);
+    const [closePopup, setAllTTClose] = useState(false);
 
-
-    // Извлекаю базу фильмов из LocalStorage, проверяю на длинну и возращую значение для обновления стейта movies
-    const extractAllMoviesLocal = () => {
-        let allMoviesLocal = JSON.parse(localStorage.getItem("allMovies"));
-        if (!allMoviesLocal) {
-            return (allMoviesLocal = []);
-        }
-        return allMoviesLocal;
-    };
-
-    const [allMovies, setAllMovies] = useState(extractAllMoviesLocal());
-
-    // Запрос списка всех фильмов и проведение ниобходимых операций с ним
-    const convertMovieData = (movie) => {
-        const convertedMovie = {
-            country: movie.country,
-            director: movie.director,
-            duration: movie.duration,
-            year: movie.year,
-            description: movie.description,
-            image: `${MOVIE_URL}${movie.image.url}`,
-            trailerLink: movie.trailerLink,
-            nameRU: movie.nameRU,
-            nameEN: movie.nameEN,
-            thumbnail: `${MOVIE_URL}${movie.image.url}`,
-            movieId: `${movie.id}`,
-            saved: false,
-        }
-
-        return convertedMovie;
-    }
-
-    const setStatusSaved = (movie, savedMovies) => {
-        let updatedMovie = movie;
-
-        // Проверяю наличие списка сохраненных фильмов
-        if (savedMovies.length >= 1) {
-            const find = savedMovies.find(el => el.movieId === movie.movieId);
-
-            // Проверяю найден ли фильм в спсике сохраненных фильмов
-            if (find) {
-                updatedMovie.saved = true;
-            } else {
-                updatedMovie.saved = false;
-            }
-
-        } else {
-            updatedMovie = movie;
-        }
-
-        return updatedMovie;
-    }
-
-    const getAllMovies = () => {
-        setIsPreloaderActive(true); // Включаем прелоадер
-        movieApi
-            .getMovies()
-            .then((res) => {
-                let moviesList = res.map((item) => convertMovieData(item)); // форматирование полей
-                moviesList = moviesList.map((item) =>
-                    setStatusSaved(item, savedMovies)
-                ); // проверка на сохранение ранее
-                setAllMovies(moviesList); // установка стейта
-                localStorage.setItem("allMovies", JSON.stringify(moviesList)); // запись в LocalStorage
-                setIsPreloaderActive(false); // Выключаем прелоадер
-            })
-            .catch((err) => {
-                console.log(err)
-            }
-            );
-    };
-
-    // Обработка регистрации пользователя
-    function handleRegister(name, email, password) {
+    function handleRegister(params) {
         mainApi
-            .signup(name, email, password)
+            .signup(params)
             .then((data) => {
                 if (data) {
-                    navigate('/signin');
+                    setIsSingUpSuccess(true);
+                    setInfoTTOpen(true);
                 }
             })
             .catch((err) => {
-                setErrorMessage(err.response);
+                setIsSingUpSuccess(false);
+                setInfoTTOpen(true);
+                console.log(err);
             });
     }
-
 
     function handleLogin(email, password) {
         mainApi
@@ -125,189 +56,150 @@ function App() {
                     setIsLoggedIn(true);
                     getUserData();
                     navigate('/movies');
+                    setAllTTClose(true);
                 }
             })
             .catch((err) => {
-                setErrorMessage(err.response);
+                setIsSingUpSuccess(false);
+                setInfoTTOpen(true);
                 console.log(err);
             });
+
     }
 
-    // Обработка де-авторизации
-    const handleSingOut = () => {
+    useEffect(() => {
+        setInfoTTOpen(false);
+        if (isSingUpSuccess) {
+            navigate('/signin');
+        }
+    }, [closePopup]);
+
+    useEffect(() => {
+        if (!isLoggedIn) {
+            mainApi
+                .getUserInfo()
+                .then((user) => {
+                    setCurrentUser(user);
+                    setIsLoggedIn(true);
+                    localStorage.setItem('loggedIn', true);
+                })
+                .catch((error) => console.log(error));
+        }
+        let routesArr = reactRouterToArray(routes);
+
+        if (routesArr.includes(location.pathname)) {
+            setNotFound(true);
+        } else {
+            setNotFound(false);
+        }
+
+    }, [navigate, isLoggedIn]);
+
+    function handleSignOut() {
         mainApi
             .logout()
             .then((res) => {
                 setIsLoggedIn(false);
                 localStorage.clear();
-                setAllMovies([]);
-                setSavedMovies([]);
+                setSavedMoviesList([]);
                 setCurrentUser({});
-                navigate("/");
+                navigate('/');
                 console.log(res);
             })
-            .catch((err) => forceLogOutIfErr(err));
+            .catch((error) => console.log(error));
     };
 
-    // Обработка обновления данных профиля
-    const onUpdateUser = ({ name, email }) => {
+    function handleProfileEdit(values) {
         mainApi
-            .updateUserInfo(name, email)
+            .updateUserInfo(values.name, values.email)
             .then((res) => {
-                setCurrentUser(res.data);
-                setIsDisabledEditProfile(false);
+                setCurrentUser(res);
             })
-            .catch((err) => {
-                forceLogOutIfErr(err);
-                setErrorMessage(err.response);
-            });
+            .catch((error) => console.log(error));
     };
 
-    // Обработка открытия попапа бургер меню
-    /*    const handlePopupOpen = () => {
-           setIsPopupOpned(!isPopupOpened);
-       }; */
+    function handleLikeMovie(movie, isLiked, id) {
+        if (isLiked) {
+            handleDeleteMovie(id);
+        } else {
+            mainApi
+                .saveMovie(movie)
+                .then((res) => {
+                    setSavedMoviesList([...savedMoviesList, res]);
+                })
+                .catch((error) => console.log(error));
+        }
+    };
 
-    // Получение данных о текущем пользователе и сохранении их в currentUser
-    const getUserData = () => {
+    function handleDeleteMovie(movie) {
+        if (typeof movie === 'object') {
+            movie = movie._id;
+        }
+        mainApi
+            .deleteMovie(movie)
+            .then(() => {
+                const freshMovies = savedMoviesList.filter(m => {
+                    if (movie === m._id) {
+                        return false;
+                    } else {
+                        return true;
+                    }
+                });
+                setSavedMoviesList(freshMovies);
+            })
+            .catch((error) => console.log(error));
+    }
+
+    useEffect(() => {
+        if (isLoggedIn && currentUser) {
+            mainApi
+                .getSavedMovies()
+                .then(data => {
+                    const UserMoviesList = data.filter(m => m.owner === currentUser._id);
+                    setSavedMoviesList(UserMoviesList);
+                })
+                .catch((error) => console.log(error));
+        }
+    }, [currentUser, isLoggedIn]);
+
+    useEffect(() => {
+    }, [savedMoviesList]);
+
+    function getUserData() {
         if (isLoggedIn) {
             mainApi
                 .getUserInfo()
                 .then((res) => {
                     setCurrentUser(res.data);
                 })
-                .catch(err => forceLogOutIfErr(err));
+                .catch((error) => console.log(error));
         }
     };
 
-    const handleSaveMovie = (movie) => {
-        // Проверяю есть сохраняемый фильм среди уже сохраненных чтобы исключить повторное сохранение фильма
-        const isMovieSawedAllReady = savedMovies.some(
-            (item) => item.movieId === movie.movieId
-        );
-
-        if (!isMovieSawedAllReady) {
-            // Удаляю лишнее свойство saved из объекта для сохранения в mongoDb 
-            delete movie.saved;
-            delete movie._id;
-            // Отправляю фильм на сохранение в mongoDb
-            mainApi
-                .saveMovie(movie)
-                .then((res) => {
-                    // Сохраненный фильм сохраняю в массив сохраненных фильмов
-                    setSavedMovies([...savedMovies, res.data]);
-                    const updatedAllMovies = allMovies.map((el) =>
-                        el.movieId === res.data.movieId
-                            ? (el = { ...el, saved: true, _id: res.data._id })
-                            : el
-                    );
-                    setAllMovies(updatedAllMovies);
-                    localStorage.setItem("allMovies", JSON.stringify(updatedAllMovies));
-                })
-                .catch((err) => forceLogOutIfErr(err));
-        }
-    };
-
-    const handleDeleteMovie = (movie) => {
-        const { _id } = movie;
-        mainApi
-            .deleteMovie(_id)
-            .then(() => {
-                const newSavedMovies = savedMovies.filter(
-                    (item) => item._id !== movie._id
-                );
-                setSavedMovies(newSavedMovies);
-                const updatedAllMovies = allMovies.map((el) =>
-                    el.movieId === movie.movieId ? (el = { ...el, saved: false }) : el
-                );
-                setAllMovies(updatedAllMovies);
-                localStorage.setItem("allMovies", JSON.stringify(updatedAllMovies));
-            })
-            .catch((err) => forceLogOutIfErr(err));
-    };
-
-    // Отправяет данные на сервер, если ответ пришел и в нем есть id, то устанавливает статус LoggedIn и данные текущего пользователя
     function tokenCheck() {
         const jwt = localStorage.getItem('jwt');
         if (jwt) {
             mainApi
-                .getUserInfo(jwt)
+                .getUserInfo()
                 .then((res) => {
-                    if (res.data._id) {
-                        setCurrentUser(res.data);
+                    if (res._id) {
+                        setCurrentUser(res);
                         setIsLoggedIn(true);
-                        localStorage.setItem("login", true);
+                        if (notFound) {
+                            navigate('/movies');
+                        }
                     }
                 })
-                .catch(err => forceLogOutIfErr(err));
-            ;
+                .catch((error) => console.log(error));
         }
     }
-    // При загрузке страницы используем tokenCheck
+
     useEffect(() => {
         if (isLoggedIn) {
             tokenCheck();
         }
     }, [isLoggedIn]);
 
-
-    /* 
-        function handleToken() {
-            const jwt = localStorage.getItem('jwt');
-            if (jwt) {
-                auth
-                    .getToken(jwt)
-                    .then((res) => {
-                        if (res) {
-                            setIsLoggedIn(true);
-                            navigate('/');
-                            console.log('token');
-                        }
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                    });
-            }
-        }
-     
-        useEffect(() => {
-            handleToken();
-        }, [loggedIn]);
-     */
-
-    // Функция делает полный лог-аут в случае, если любой запрос к серверу заканчивается ошибкой авторизации
-    const forceLogOutIfErr = (err) => {
-        if (err.response === 'Authorization is needed') {
-            setIsLoggedIn(false);
-            localStorage.clear();
-            setAllMovies([]);
-            setSavedMovies([]);
-            setCurrentUser({});
-            setErrorMessage('');
-            navigate("/");
-            setIsDisabledEditProfile(false);
-        } else { return err }
-    }
-
-    // При загрузке страницы запрашивает список сохраненных фильмов
-    useEffect(() => {
-        if (isLoggedIn) {
-            mainApi
-                .getSavedMovies()
-                .then((data) => setSavedMovies(data.data))
-                .catch((err) => {
-                    forceLogOutIfErr(err);
-                    console.log(err)
-                });
-        }
-    }, [isLoggedIn]);
-
-
-    /*   function handleSingOut() {
-          setIsLoggedIn(false);
-          localStorage.removeItem('jwt');
-          navigate('/signin');
-      } */
 
     function handleOpenMenu() {
         setClickMenu(true);
@@ -316,18 +208,17 @@ function App() {
     function handleCloseMenu() {
         setClickMenu(false);
     }
-
-    return (
+    const routes = (
         <CurrentUserContext.Provider value={currentUser}>
             <div className='app'>
                 {headerPaths.includes(location.pathname) && (
-                    <Header isLoggedIn={isLoggedIn} />
+                    <Header isOpen={handleOpenMenu} />
                 )}
                 <Routes>
                     <Route path='/'
                         element={
                             <>
-                                <Header isOpen={handleOpenMenu} />
+                                <Header />
                                 <Main />
                                 <Footer />
                             </>
@@ -338,46 +229,44 @@ function App() {
                     <Route path='/profile'
                         element={
                             <ProtectedRouteElement
-                                onLogout={handleSingOut}
-                                isLoggedIn={isLoggedIn}
-                                handleUpdateUserData={onUpdateUser}
-                                errorMesage={errorMesage}
-                                setErrorMessage={setErrorMessage}
-                                isDisabledEditProfile={isDisabledEditProfile}
-                                setIsDisabledEditProfile={setIsDisabledEditProfile}
-                                element={
-                                    Profile
-                                }
+                                element={Profile}
+                                loggedIn={isLoggedIn}
+                                onSignOut={handleSignOut}
+                                handleProfileEdit={handleProfileEdit}
                             />} />
                     <Route path='/movies'
                         element={
                             <ProtectedRouteElement
-                                isLoggedIn={isLoggedIn}
-                                handleSaveMovie={handleSaveMovie}
-                                savedMovies={savedMovies}
-                                handleDeleteMovie={handleDeleteMovie}
-                                allMovies={allMovies}
-                                getAllMovies={getAllMovies}
-                                isPreloaderActive={isPreloaderActive}
-                                element={
-                                    Movies
-                                }
+                                element={Movies}
+                                loggedIn={isLoggedIn}
+                                savedMoviesList={savedMoviesList}
+                                onLike={handleLikeMovie}
+                                onDelete={handleDeleteMovie}
                             />} />
                     <Route path='/saved-movies'
                         element={
                             <ProtectedRouteElement
-                                isLoggedIn={isLoggedIn}
-                                handleDeleteMovie={handleDeleteMovie} А
+                                loggedIn={isLoggedIn}
                                 element={SavedMovies}
+                                savedMoviesList={savedMoviesList}
+                                onDelete={handleDeleteMovie}
                             />} />
                     <Route path='*'
                         element={<NotFound />} />
                 </Routes>
+
                 {footerPaths.includes(location.pathname) && <Footer />}
             </div>
-            <MenuPopup isOpen={isClickMenu} onClose={handleCloseMenu} />
+            <MenuPopup isOpen={isClickMenu} onClose={handleCloseMenu} setIsOpen={handleCloseMenu} />
+            <InfoTooltip
+                isOpen={isInfoTooltipOpen}
+                onClose={setAllTTClose}
+                isSingUpSuccess={isSingUpSuccess}
+            />
         </CurrentUserContext.Provider>
     );
+
+    return routes;
 };
 
 export default App;

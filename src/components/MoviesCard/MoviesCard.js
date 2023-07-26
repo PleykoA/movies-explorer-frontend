@@ -1,48 +1,45 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './MoviesCard.css';
+import { getTime } from '../../utils/utils';
+import { MOVIES_URL } from '../../utils/constants';
 import { useLocation } from 'react-router-dom';
 
-const MoviesCard = ({ movie, handleClick }) => {
+function MoviesCard({ movie, savedMoviesList, onLike, onDelete }) {
     let location = useLocation();
-    const likeBtn = location.pathname === '/movies';
-    const deleteBtn = location.pathname === '/saved-movies';
-    const [isLiked, setIsLiked] = useState(movie.saved);
-
-    // Форматирование продолжительности фильма в часы
-    const getTimeFromMins = (duration) => {
-        let hours = Math.trunc(duration / 60);
-        let minutes = duration % 60;
-        return `${hours}ч ${minutes}м`;
-    };
-
-    // Обрабокта на жатия клика на иконке
-    const handleClickOnIcon = () => {
-        setIsLiked(!isLiked); // Меняем сстатус сохранения фильма
-        handleClick(movie, isLiked); // Выполняем функцию, которая приходит в пропсах (либо из movies либо ищ saved-movies)
-    };
+    const isLike = location.pathname === '/movies';
+    const isDelete = location.pathname === '/saved-movies';
+    const isLiked = savedMoviesList ? savedMoviesList.some((i) => i.movieId === movie.id) : false;
+    const saved = savedMoviesList ? savedMoviesList.find((item) => item.movieId === movie.id) : '';
 
     return (
         <li className='movies-card'>
             <div className='movies-card__info'>
                 <p className='movies-card__name'>{movie.nameRU}</p>
-                <p className='movies-card__duration'>{getTimeFromMins(movie.duration)}</p>
-                {likeBtn && (
+                <p className='movies-card__duration'>{getTime(movie.duration)}</p>
+                {isLike && (
                     <button
-                        className={`movies-card__like ${isLiked ? ' movies-card__like_active' : ''}`}></button>
+                        onClick={() => onLike(movie, isLiked, saved?._id)}
+                        className={`movies-card__like ${isLiked ? ' movies-card__like_active' : ''}`} type='button'
+                    ></button>
                 )}
-                {deleteBtn && (
+
+                {isDelete && (
                     <button
-                        className={`movies-card__delete`}
-                        onClick={handleClickOnIcon}></button>
+                        onClick={() => onDelete(movie._id)}
+                        className={'movies-card__delete'}
+                    ></button>
                 )}
-            </div>
-            <img
+
+            </div><a href={movie.trailerLink} target='_blank' rel='noreferrer'><img
                 className='movies-card__image'
-                src={movie.thumbnail}
+                src={movie.image.url ? `${MOVIES_URL}${movie.image.url}` : movie.image}
                 alt={movie.nameRU}
+                title={`${movie.description} \n\n ${movie.country} ${movie.year}г.`}
             />
+            </a>
         </li>
     );
 };
+
 
 export default MoviesCard;

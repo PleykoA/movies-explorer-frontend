@@ -68,12 +68,33 @@
     color: #ee3465;
 }
 
+.profile__button-save {
+    margin-top: 204px;
+    background-color: #202020;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+
+}
+
+.profile__button-save:hover {
+    -webkit-transform: scale(1.2);
+    -ms-transform: scale(1.2);
+    transform: scale(1.2);
+}
+
 .profile__button-edit {
     margin-top: 204px;
     background-color: #202020;
     color: #fff;
     border: none;
     cursor: pointer;
+}
+
+.profile__button-edit:hover {
+    -webkit-transform: scale(1.2);
+    -ms-transform: scale(1.2);
+    transform: scale(1.2);
 }
 
 .profile__button-signout {
@@ -84,6 +105,12 @@
     cursor: pointer;
 }
 
+.profile__button-signout:hover {
+    -webkit-transform: scale(1.2);
+    -ms-transform: scale(1.2);
+    transform: scale(1.2);
+}
+
 @media screen and (max-width: 768px) {
 
     .profile__button-signout {
@@ -91,6 +118,11 @@
     }
 
     .profile__button-edit {
+        background-color: #fff;
+        color: #000;
+    }
+
+    .profile__button-save {
         background-color: #fff;
         color: #000;
     }

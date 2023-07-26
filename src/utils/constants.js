@@ -1,20 +1,34 @@
-const REGEXP_EMAIL = /^([^ ]+@[^ ]+\.[a-z]{2,6}|)$/;
-const REGEXP_NAME = /[a-zа-я\- ]/gmi;
-const SHORT_MOVIES_LENGTH = 40;
-const MOVIES_PER_PAGE_SIZE_MORE_1280 = 12;
-const MOVIES_PER_PAGE_SIZE_761_1279 = 8;
-const MOVIES_PER_PAGE_SIZE_LESS_761 = 5;
-const MOVIES_BTN_ADD_SIZE_MORE_1280 = 3;
-const MOVIES_BTN_ADD_SIZE_LESS_1279 = 2;
+const shortMovies = 'shortMovies';
+const MAIN_API = 'https://api.pleykoa-movies.nomoredomains.work';
+const MOVIES_URL = 'https://api.nomoreparties.co';
+const DEVICE_WIDTH = {
+    desktop: {
+        width: 1280,
+        cards: {
+            total: 12,
+            more: 3,
+        },
+    },
+    tablet: {
+        width: 768,
+        cards: {
+            total: 8,
+            more: 2,
+        },
+    },
+    mobile: {
+        width: 580,
+        cards: {
+            total: 5,
+            more: 2,
+        },
+    },
+};
 
 
 export {
-    REGEXP_EMAIL,
-    REGEXP_NAME,
-    SHORT_MOVIES_LENGTH,
-    MOVIES_PER_PAGE_SIZE_MORE_1280,
-    MOVIES_PER_PAGE_SIZE_761_1279,
-    MOVIES_PER_PAGE_SIZE_LESS_761,
-    MOVIES_BTN_ADD_SIZE_MORE_1280,
-    MOVIES_BTN_ADD_SIZE_LESS_1279,
+    MOVIES_URL,
+    MAIN_API,
+    shortMovies,
+    DEVICE_WIDTH
 };

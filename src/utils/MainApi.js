@@ -1,10 +1,10 @@
-const MAIN_API = 'https://api.pleykoa-movies.nomoredomains.work';
+import { MAIN_API } from './constants';
 
 class Api {
     constructor({ baseUrl }) {
         this._baseUrl = baseUrl;
     }
-    _checkResponse = (response) => {
+    _checkResponse(response) {
         if (response.ok) {
             return response.json();
         } else {
@@ -16,92 +16,99 @@ class Api {
         }
     };
 
-    signup = (name, email, password) => {
+    signup(data) {
         return fetch(`${MAIN_API}/signup`, {
-            method: "POST",
-            credentials: "include",
+            method: 'POST',
             headers: {
-                "Content-Type": "application/json",
+                'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ name, email, password }),
+            body: JSON.stringify(data),
         }).then(res => this._checkResponse(res));
     };
 
-    login = (email, password) => {
+    login(email, password) {
         return fetch(`${MAIN_API}/signin`, {
-            method: "POST",
-            credentials: "include",
+            method: 'POST',
             headers: {
-                "Content-Type": "application/json",
+                'Content-Type': 'application/json',
             },
             body: JSON.stringify({ email, password }),
         }).then(res => this._checkResponse(res));
     };
 
-    getUserInfo = () => {
+    getUserInfo() {
         return fetch(`${MAIN_API}/users/me`, {
-            method: "GET",
-            credentials: "include",
+            method: 'GET',
             headers: {
-                "Content-Type": "application/json",
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + localStorage.getItem('jwt')
             },
 
         }).then(res => this._checkResponse(res));
     };
-    updateUserInfo = (name, email) => {
+
+    updateUserInfo(name, email) {
         return fetch(`${MAIN_API}/users/me`, {
-            method: "PATCH",
-            credentials: "include",
+            method: 'PATCH',
             headers: {
-                "Content-Type": "application/json",
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + localStorage.getItem('jwt')
             },
             body: JSON.stringify({ name, email }),
 
         }).then(res => this._checkResponse(res));
     };
-    logout = () => {
+    logout() {
         return fetch(`${MAIN_API}/signout`, {
-            method: "GET",
-            credentials: 'include',
+            method: 'GET',
             headers: {
-                "Content-Type": "application/json"
+                'Content-Type': 'application/json'
             }
         })
             .then(res => this._checkResponse(res));
     }
 
-    saveMovie = (movieData) => {
-        return fetch(`${MAIN_API}/movies`, {
-            method: "POST",
-            credentials: 'include',
+    saveMovie(data) {
+        return fetch(`${this._baseUrl}/movies`, {
+            method: 'POST',
             headers: {
-                "Content-Type": "application/json"
+                authorization: `Bearer ${localStorage.getItem('jwt')}`,
+                'Content-Type': 'application/json',
             },
-            body: JSON.stringify(movieData),
-        })
-            .then(res => this._checkResponse(res));
+            body: JSON.stringify({
+                country: data.country,
+                director: data.director,
+                duration: data.duration,
+                year: data.year,
+                description: data.description,
+                image: 'https://api.nomoreparties.co' + data.image.url,
+                trailerLink: data.trailerLink,
+                thumbnail: 'https://api.nomoreparties.co' + data.image.formats.thumbnail.url,
+                movieId: data.id,
+                nameRU: data.nameRU,
+                nameEN: data.nameEN,
+            }),
+        }).then(res => this._checkResponse(res));
     }
 
-    getSavedMovies = () => {
+    getSavedMovies() {
         return fetch(`${MAIN_API}/movies`, {
-            method: "GET",
-            credentials: 'include',
+            method: 'GET',
             headers: {
-                "Content-Type": "application/json"
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + localStorage.getItem('jwt')
             }
         })
             .then(res => this._checkResponse(res));
     }
 
-    deleteMovie = (id) => {
-        return fetch(`${MAIN_API}/movies/${id}`, {
-            method: "DELETE",
-            credentials: 'include',
+    deleteMovie(data) {
+        return fetch(`${this._baseUrl}/movies/${data}`, {
+            method: 'DELETE',
             headers: {
-                "Content-Type": "application/json"
-            }
-        })
-            .then(res => this._checkResponse(res));
+                authorization: `Bearer ${localStorage.getItem('jwt')}`,
+            },
+        }).then(res => this._checkResponse(res));
     }
 }
 const mainApi = new Api({

@@ -38,7 +38,7 @@
     transition: 0.2s;
 }
 
-.filter-checkbox__input:checked+label:after {
+.filter-checkbox__input:checked+label {
     background: #ebebeb;
 }
 

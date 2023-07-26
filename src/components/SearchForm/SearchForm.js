@@ -1,46 +1,41 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import FilterCheckBox from '../FilterCheckbox/FilterCheckbox';
 import search from '../../images/search.svg';
 import find from '../../images/find.svg';
 import './SearchForm.css';
+import { useLocation } from 'react-router-dom';
+import { useFormValidation } from '../../utils/validation';
 
-const SearchForm = ({
-    handleMoviesSearch,
-    keyWords = "",
-    isCheckBoxActive,
-    setIsCheckBoxActive,
-}) => {
-    const [isSpanActive, setIsSpanActive] = useState(false);
-    const [text, setText] = useState(keyWords);
+function SearchForm({ handleFormSubmit, displayShortFilms, shortMovies }) {
+    const location = useLocation();
+    const { values, handleChange } = useFormValidation({});
 
-    // Обработка сабмита формы
-    const handleSubmit = (e) => {
+    function handleSubmit(e) {
         e.preventDefault();
-        if (text) {
-            handleMoviesSearch(text, isCheckBoxActive);
+        if (typeof values.search !== 'undefined' && values.search !== '') {
+            if (values.search.trim() !== '') {
+                handleFormSubmit(values.search, false)
+            } else {
+                localStorage.removeItem(`movieSearch`);
+                handleFormSubmit(values.search, true)
+            }
         } else {
-            setIsSpanActive(true);
+            localStorage.removeItem(`movieSearch`);
+            handleFormSubmit(values.search, true)
         }
-    };
-    const handleCheckBoxClick = () => {
-        setIsCheckBoxActive(!isCheckBoxActive);
     };
 
-    // Обработка отправки формы по нажатию Enter
-    const handleKeydown = (e) => {
-        if (e.key === "Enter") {
-            handleSubmit(e);
+    useEffect(() => {
+        if (location.pathname === '/movies' && localStorage.getItem(`movieSearch`)) {
+            const searchValues = localStorage.getItem(`movieSearch`);
+            values.search = searchValues;
         }
-    };
-    const handleChange = (e) => {
-        const value = e.target.value;
-        setText(value);
-    };
+    }, [location.pathname]);
 
     return (
         <section className='search'>
             <div className='search__container'>
-                <form className='search__form' onSubmit={handleSubmit} onKeyDown={handleKeydown} noValidate>
+                <form className='search__form' onSubmit={handleSubmit} noValidate>
                     <img className='search__icon' src={search} alt='Поисковая иконка' />
                     <input
                         name="search"
@@ -48,12 +43,13 @@ const SearchForm = ({
                         className='search__input'
                         placeholder='Фильм'
                         onChange={handleChange}
+                        value={values.search || ''}
                         required />
 
-                    <button className={`search__button ${isSpanActive ? "search__button_active" : ""
-                        }`}
-                        type="button"
+                    <button className='search__button'
+                        type="submit"
                     >
+
                         <img
                             className='search__button-icon'
                             src={find}
@@ -62,8 +58,8 @@ const SearchForm = ({
                     </button>
                 </form>
                 <FilterCheckBox
-                    isCheckBoxActive={isCheckBoxActive}
-                    handleCheckBoxClick={handleCheckBoxClick} />
+                    onCheck={() => { displayShortFilms(values.search) }}
+                    isChecked={shortMovies ? true : false} />
             </div>
         </section>
     );

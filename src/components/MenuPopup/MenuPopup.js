@@ -5,7 +5,7 @@ import closeIcon from '../../images/close-icon-menu.svg';
 import iconProfile from '../../images/profile.svg';
 
 
-function Menu({ isOpen, onClose }) {
+function Menu({ isOpen, onClose, setIsOpen }) {
     function handleEscClose(evt) {
         evt.key === 'Escape' && onClose();
     }
@@ -19,7 +19,6 @@ function Menu({ isOpen, onClose }) {
         <div
             className={`menu
     ${isOpen ? 'menu_opened' : ''}`}
-            onClick={onClose}
         >
             <div className='menu__container'>
                 <button className='menu__close-button' type='button'>
@@ -27,7 +26,9 @@ function Menu({ isOpen, onClose }) {
                         className='menu__close-button-image'
                         src={closeIcon}
                         alt='Крестик для закрытия окна'
-                        onClick={onClose}
+                        onClick={() => {
+                            setIsOpen(false)
+                        }}
                     />
                 </button>
                 <ul className='menu__items'>

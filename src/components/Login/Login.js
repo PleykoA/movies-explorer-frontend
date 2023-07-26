@@ -39,7 +39,7 @@ const Login = ({ onLogin }) => {
           value={values.email || ''}
           onChange={handleChange}
           id='email'
-          pattern='^([^ ]+@[^ ]+\.[a-z]{2,6}|)$'
+          pattern='^[\w\-\.]+@([\w\-]+\.)+[\w\-]{2,4}$'
           placeholder='E-mail'
           minLength='2'
           maxLength='30'
@@ -52,8 +52,7 @@ const Login = ({ onLogin }) => {
           {errors.email}
         </span>
 
-        <label htmlFor='' className='login__form-label'>
-          Пароль </label>
+        <label htmlFor='' className='login__form-label'>Пароль</label>
         <input
           className='login__input login__input_item_password'
           type='password'
@@ -74,9 +73,7 @@ const Login = ({ onLogin }) => {
         </span>
 
         <button type='submit'
-          className={`login__submit ${!isValid ? `login__submit_disabled` : ``}`}>
-          Войти
-        </button>
+          className={`login__submit ${!isValid ? `login__submit_disabled` : ``}`}>Войти</button>
 
         <div className='login__signup'>
           Еще не зарегистрированы?

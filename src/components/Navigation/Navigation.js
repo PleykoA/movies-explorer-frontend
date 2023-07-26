@@ -23,7 +23,6 @@ const Navigation = ({ isOpen }) => {
                         to='/profile'
                         className='navigation__link navigation__link_item_profile'
                     >
-                        <span className='navigation__profile-subtext'></span>
                         <img
                             className='navigation__profile-icon'
                             src={icon}
