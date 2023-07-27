@@ -20,7 +20,7 @@ import reactRouterToArray from "react-router-to-array";
 function App() {
     const location = useLocation();
     const navigate = useNavigate();
-    const [currentUser, setCurrentUser] = useState('');
+    const [currentUser, setCurrentUser] = useState({});
     const headerPaths = ['/movies', '/saved-movies', '/profile'];
     const footerPaths = ['/movies', '/saved-movies'];
     const [isClickMenu, setClickMenu] = useState(false);
@@ -33,6 +33,10 @@ function App() {
     const [isInfoTooltipOpen, setInfoTTOpen] = useState(false);
     const [closePopup, setAllTTClose] = useState(false);
     const [tempUserData, settempUserData] = useState([]);
+
+    useEffect(() => {
+        checkToken();
+    }, []);
 
     function handleRegister(params) {
         mainApi
@@ -49,7 +53,11 @@ function App() {
             .catch((err) => {
                 setIsSingUpSuccess(false);
                 setSuccessTTState(false);
-                setToolTipMessage("При регистрации произошла ошибка. Попробуйте ещё");
+                if (err.message.indexOf("409") > 0) {
+                    setToolTipMessage("Изменения не сохранены! Пользователь с таким email уже существует");
+                } else {
+                    setToolTipMessage("Произошла ошибка! Изменения не сохранены!");
+                }
                 setInfoTTOpen(true);
                 console.log(err);
             });
@@ -61,6 +69,14 @@ function App() {
             .then((data) => {
                 if (data.token) {
                     localStorage.setItem('jwt', data.token);
+                    mainApi
+                        .getUserInfo()
+                        .then((user) => {
+                            setCurrentUser(user);
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                        });
                     setIsLoggedIn(true);
                     navigate('/movies');
                 }
@@ -68,9 +84,9 @@ function App() {
             .catch((err) => {
                 setIsSingUpSuccess(false);
                 setInfoTTOpen(true);
+                setToolTipMessage("Пользователь не найден!");
                 console.log(err);
             });
-
     }
 
     useEffect(() => {
@@ -82,12 +98,26 @@ function App() {
     }, [closePopup]);
 
     useEffect(() => {
+        let routesArr = reactRouterToArray(routes);
+        if (routesArr.includes(location.pathname)) {
+            setNotFound(true);
+        } else {
+            setNotFound(false);
+        }
+    }, [navigate]);
+
+    function checkToken() {
         mainApi
             .getUserInfo()
             .then((user) => {
                 setCurrentUser(user);
                 setIsLoggedIn(true);
                 localStorage.setItem('loggedIn', true);
+                if (location.pathname === '/signin' || location.pathname === '/signup') {
+                    navigate('/movies', { replace: true })
+                } else {
+                    navigate({ location }, { replace: true })
+                }
             })
             .catch((error) => {
                 console.log(error);
@@ -96,16 +126,7 @@ function App() {
                 }
                 setIsLoggedIn(false);
             });
-
-        let routesArr = reactRouterToArray(routes);
-
-        if (routesArr.includes(location.pathname)) {
-            setNotFound(true);
-        } else {
-            setNotFound(false);
-        }
-
-    }, [navigate, isLoggedIn]);
+    }
 
     function handleSignOut() {
         mainApi
@@ -126,14 +147,17 @@ function App() {
             .updateUserInfo(values.name, values.email)
             .then((res) => {
                 setCurrentUser(res);
-                setToolTipMessage("Изменения сохранены! Щикарно");
+                setToolTipMessage("Изменения успешно сохранены!");
                 setSuccessTTState(true);
                 setInfoTTOpen(true);
             })
             .catch((error) => {
-                console.log(error);
-                setToolTipMessage("Изменения не сохранены! Попробуйте ещё раз позже.");
-                setSuccessTTState(true);
+                if (error.message.indexOf("409") > 0) {
+                    setToolTipMessage("Изменения не сохранены! Пользователь с таким email уже существует");
+                } else {
+                    setToolTipMessage("Произошла ошибка! Изменения не сохранены!");
+                }
+                setSuccessTTState(false);
                 setInfoTTOpen(true);
             });
     };
@@ -171,7 +195,7 @@ function App() {
     }
 
     useEffect(() => {
-        if (isLoggedIn && currentUser) {
+        if (isLoggedIn && currentUser && (location.pathname === '/movies' || location.pathname === '/saved-movies')) {
             mainApi
                 .getSavedMovies()
                 .then(data => {

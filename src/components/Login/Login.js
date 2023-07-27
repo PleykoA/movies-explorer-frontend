@@ -3,6 +3,7 @@ import loginLogo from '../../images/logo.svg';
 import { Link } from 'react-router-dom';
 import './Login.css';
 import { useFormValidation } from '../../utils/validation';
+import { validateEmail } from '../../utils/validation';
 
 const Login = ({ onLogin }) => {
   const { values, handleChange, errors, resetValidation, isValid } = useFormValidation({});
@@ -39,17 +40,17 @@ const Login = ({ onLogin }) => {
           value={values.email || ''}
           onChange={handleChange}
           id='email'
-          pattern='^[\w\-\.]+@([\w\-]+\.)+[\w\-]{2,4}$'
+          pattern='/^\w+([\\.-]?\w+)*@\w+([\\.-]?\w+)*(\.\w{2,10})+$/'
           placeholder='E-mail'
           minLength='2'
           maxLength='30'
           required
         />
         <span
-          className={`login__input-error ${isValid ? '' : 'login__input-error_active'
+          className={`login__input-error ${isValid && !validateEmail(values.email).invalid ? '' : 'login__input-error_active'
             }`}
         >
-          {errors.email}
+          {validateEmail(values.email).message}
         </span>
 
         <label htmlFor='' className='login__form-label'>Пароль</label>
@@ -73,7 +74,7 @@ const Login = ({ onLogin }) => {
         </span>
 
         <button type='submit'
-          className={`login__submit ${!isValid ? `login__submit_disabled` : ``}`} disabled={!isValid}>Войти</button>
+          className={`login__submit ${!isValid && validateEmail(values.email).invalid ? `login__submit_disabled` : ``}`} disabled={!isValid && validateEmail(values.email).invalid}>Войти</button>
 
         <div className='login__signup'>
           Еще не зарегистрированы?

@@ -3,13 +3,20 @@ import { Link } from 'react-router-dom';
 import { useFormValidation } from '../../utils/validation';
 import Logo from '../../images/logo.svg';
 import './Register.css';
+import { validateEmail } from '../../utils/validation';
 
 const Register = ({ onRegister }) => {
-    const { values, handleChange, errors, resetValidation, isValid } = useFormValidation();
+    const { values, handleChange, errors, resetValidation, isValid, setIsValid } = useFormValidation();
 
     useEffect(() => {
         resetValidation();
     }, [resetValidation]);
+
+    useEffect(() => {
+        if (validateEmail(values.email).invalid) {
+            setIsValid(false);
+        }
+    }, [handleChange]);
 
     function handleSubmit(evt) {
         evt.preventDefault(evt);
@@ -34,6 +41,7 @@ const Register = ({ onRegister }) => {
                     id='user-name'
                     name='name'
                     type='text'
+                    pattern="^[A-Za-zА-Яа-яЁё /s -]+$"
                     value={values.name || ''}
                     onChange={handleChange}
                     placeholder='Введите имя'
@@ -55,6 +63,7 @@ const Register = ({ onRegister }) => {
                     id='user-email'
                     name='email'
                     type='email'
+                    pattern='/^\w+([\\.-]?\w+)*@\w+([\\.-]?\w+)*(\.\w{2,10})+$/'
                     value={values.email || ''}
                     onChange={handleChange}
                     placeholder='Введите почту'
@@ -65,7 +74,7 @@ const Register = ({ onRegister }) => {
                 <span
                     className={`register__input-error ${isValid ? '' : 'register__input-error_active'}`}
                 >
-                    {errors.email}
+                    {validateEmail(values.email).message}
                 </span>
 
                 <label className='register__form-label'>

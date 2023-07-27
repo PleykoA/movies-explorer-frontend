@@ -1,6 +1,8 @@
 const shortMovies = 'shortMovies';
 const MAIN_API = 'https://api.pleykoa-movies.nomoredomains.work';
 const MOVIES_URL = 'https://api.nomoreparties.co';
+const regexEmail = /^\w+([\\.-]?\w+)*@\w+([\\.-]?\w+)*(\.\w{2,10})+$/;
+
 const DEVICE_WIDTH = {
     desktop: {
         width: 1280,
@@ -30,5 +32,6 @@ export {
     MOVIES_URL,
     MAIN_API,
     shortMovies,
-    DEVICE_WIDTH
+    DEVICE_WIDTH,
+    regexEmail
 };

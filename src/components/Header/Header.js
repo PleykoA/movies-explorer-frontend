@@ -5,9 +5,6 @@ import SignIn from '../SignIn/SignIn';
 import logo from '../../images/logo.svg';
 
 export default function Header({ isOpen, isLoggedIn }) {
-
-    console.log(isLoggedIn);
-
     return (
         <header className='header'>
             <Link to='/' className='header__link'>

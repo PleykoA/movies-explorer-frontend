@@ -8,8 +8,10 @@
     font-size: 22px;
     font-weight: 400;
     border-bottom: 1px solid #A0A0A0;
-    margin: 100px 70px 90px;
+    margin: 100px auto 90px;
     padding-bottom: 23px;
+    max-width: 1140px;
+    width: 90%;
 }
 
 .techs__container {
@@ -72,8 +74,6 @@
 
     .techs__title {
         margin-top: 90px;
-        margin-left: 50px;
-        margin-right: 50px;
         color: #000;
         border-bottom: 1px solid #000;
     }

@@ -33,9 +33,7 @@ function Movies({ savedMoviesList, onLike, onDelete }) {
   function handleFormSubmit(inputValue, loadAll) {
     setIsLoader(true);
     localStorage.setItem(`movieSearch`, inputValue);
-    localStorage.setItem(`shortMovies`, shortMovies);
-
-    if (loadAll) {
+    if (loadAll || isAllMovies.length === 0) {
       movieApi
         .getMovies()
         .then(movies => {
@@ -60,20 +58,15 @@ function Movies({ savedMoviesList, onLike, onDelete }) {
           setIsLoader(false);
         });
     } else {
-      if (isAllMovies.length === 0) {
-        movieApi
-          .getMovies()
-          .then(movies => {
-            setIsAllMovies(movies);
-            handleSetFilteredMovies(isAllMovies, inputValue, shortMovies);
-          })
-          .catch((err) => console.log(err)
-          )
-          .finally(() => setIsLoader(false));
-      } else {
-        handleSetFilteredMovies(isAllMovies, inputValue, shortMovies);
-        setIsLoader(false)
-      }
+      movieApi
+        .getMovies()
+        .then(movies => {
+          setIsAllMovies(movies);
+          handleSetFilteredMovies(isAllMovies, inputValue, shortMovies);
+        })
+        .catch((err) => console.log(err)
+        )
+        .finally(() => setIsLoader(false));
     }
   }
 
@@ -132,7 +125,7 @@ function Movies({ savedMoviesList, onLike, onDelete }) {
         shortMovies={shortMovies}
       />
       {isLoader && <Preloader />}
-      {!NotFound ?
+      {!NotFound && filteredMovies.length > 0 ?
         (<MoviesCardList
           isSavedMovies={false}
           moviesList={filteredMovies}
